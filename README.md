@@ -1,2 +1,2 @@
-# hourly
-A web app to be built in Flask!
+# Pic-y Eats
+A web app for food enthusiasts. Built with Flask!
