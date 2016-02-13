@@ -1,7 +1,12 @@
-drop table if exists entries;
+drop table if exists users;
 create table users (
-    id integer primary key autoincrement,
-    url text not null,
-    title text not null,
-    text text not null
+    # MICHAEL FILL THIS OUT
 );
+
+drop table if exists food;
+create table food (
+	id integer primary key autoincrement,
+	title text not null,
+	description text,
+	theme text not null
+)
