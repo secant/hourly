@@ -1,6 +1,12 @@
 drop table if exists users;
 create table users (
     user text
+    id integer primary key autoincrement,
+    username text not null,
+    password text not null,
+    favfood text not null,
+    firstname text not null,
+    lastname text not null
 );
 
 drop table if exists food;
