@@ -1,0 +1,41 @@
+beer
+brandy
+cocoa
+cocktail
+coffee
+coke
+green tea
+ice coffee
+ice tea
+juice
+lemonade
+liquor
+milk
+milkshake
+orange juice
+punch
+soda
+soft drink
+tea
+tomato juice
+water
+whiskey
+wine
+breakfast
+buffet
+cheese
+chicken
+chocolate
+sausages
+soup
+vegetables
+lemon
+lime
+Mandarin orange
+navel orange
+orange
+pink grapefruit
+tangerine
+T-bone
+tenderloin
+wing
