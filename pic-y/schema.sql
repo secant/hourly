@@ -21,3 +21,4 @@ create table food (
 );
 
 insert into food values(1, 'bob', 'title', 'desc', 'loc', 'potato', '1.jpg');
+
