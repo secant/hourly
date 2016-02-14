@@ -7,7 +7,7 @@ SECRET_KEY = 'secretsecret'
 USERNAME = 'admin'
 PASSWORD = 'default'
 
-UPLOAD_FOLDER = 'static/images/'
+UPLOAD_FOLDER = 'FlaskWebProject/static/images/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 app = Flask(__name__)
