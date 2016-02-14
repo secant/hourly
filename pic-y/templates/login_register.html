@@ -1,7 +1,8 @@
 {% extends "layout.html" %}
 {% block body %}
   <h2>Login</h2>
-  <!--{% if error %}<p class="error"><strong>Error:</strong> {{ error }}{% endif %}-->
+  <!--check out for loop-->
+  {% if error1 %}<p class="error"><strong>Error:</strong> {{ error1 }}{% endif %}
   <form action="{{ url_for('login') }}" method=post>
     <dl>
       <dt>Username:
@@ -13,7 +14,7 @@
   </form>
 
   <h2>Register</h2>
-  <!--{% if error %}<p class="error"><strong>Error:</strong> {{ error }}{% endif %}-->
+  {% if error2 %}<p class="error"><strong>Error:</strong> {{ error2 }}{% endif %}
   <form action="{{ url_for('add_user') }}" method=post>
       <dl>
         <dt>Username:
