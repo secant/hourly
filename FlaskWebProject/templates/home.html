@@ -2,17 +2,19 @@
     <head>
         <meta charset="utf-8">
         <title>title</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     </head>
 
     <body>
 
-    <video controls autoplay='true' loop='true' muted poster="{{url_for('static', filename='startimage.jpg')}}" id="background">
+    <video autoplay loop muted poster="{{url_for('static', filename='startimage.jpg')}}" id="background">
+    	<source src="{{url_for('static', filename='food.webm')}}" type="video/webm">
         <source src="{{url_for('static', filename='food.mp4')}}" type="video/mp4">
+        <source src="{{url_for('static', filename='food.ogg')}}" type="video/ogg">
     </video>
         <div class="container" style="height: 100vh;">
             <h1><a href="/login_register" style="font-size: 60px;">Become a Pic-y Eater
-            </a><br>
+            </a><br><br><br>
             Savory bites of social media--snap it while it lasts.</h1>
         </div>
     </body>
