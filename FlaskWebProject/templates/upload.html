@@ -1,34 +1,77 @@
+{% extends "base.html" %}
 <!doctype html>
-    <title>Upload Image</title>
-    <h1>Upload Image</h1>
-    {% if submit %}
-        {% if error %}
-            There was something wrong with your submission. Please fix the following: <br>
-            <ul>
-                {% for e in error %}
-                    <li>{{ e }}</li>
-                {% endfor %}
-            </ul>
+{% block sub_heading %} Upload {% endblock %}
+    {% block body %}
+    <div class="container">
+        <h1>Upload Image</h1>
+        {% if submit %}
+            {% if error %}
+                There was something wrong with your submission. Please fix the following: <br>
+                <ul>
+                    {% for e in error %}
+                        <li>{{ e }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
         {% endif %}
-    {% endif %}
-    <form action="" method=post enctype=multipart/form-data id="upload">
-      <p><input type=file name=file><br>
-         <b>Title your image*: </b><br>
-         <input type=text name=title><br>
-         <b>Add a description: </b><br>
-         <textarea form="upload" name="description"></textarea><br>
-         <b>Location: </b><br>
-         <input type=text name=location><br>
-         <input type=submit value=Upload>
-    </form>
-    {% if submit %}
-        {% if error %}
-        {% else %}
-        Success! The picture you uploaded: <br>
-        <img src="{{ url_for('static', filename=filename) }}"><br>
-        Title: {{ info['title'] }} <br>
-        Description: {{ info['description'] }} <br>
-        Location: {{ info['location'] }} <br>
-        <a href="{{ url_for('show_pics') }}">view feed</a>
+        <form role="form" action="" method=post enctype=multipart/form-data id="upload">
+            <div class="form-group">
+                <span class="btn btn-info btn-file">
+                <input type="file">
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label for="title">Title your image*</label>
+                <input type="text" class="form-control" id="title" placeholder="Enter title">
+            </div>
+
+            <div class="form-group">
+                <label for="descrip">Add a description:</label>
+                <textarea form="upload" class="form-control" id="descrip" placeholder="Enter description"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" class="form-control" id="location" placeholder="Enter location">
+            </div>
+
+            <button type="submit" class="btn btn-info">Upload</button>
+        </form>
+
+        {% if submit %}
+            {% if error %}
+            {% else %}
+            Success! The picture you uploaded: <br>
+            <img src="{{ url_for('static', filename=filename) }}"><br>
+            Title: {{ info['title'] }} <br>
+            Description: {{ info['description'] }} <br>
+            Location: {{ info['location'] }} <br>
+            <a href="{{ url_for('show_pics') }}">view feed</a>
+            {% endif %}
         {% endif %}
-    {% endif %}
+    </div>
+    {% endblock %}
+</html>
+<!--
+<div class="container">
+  <h2>Vertical (basic) form</h2>
+  <form role="form">
+
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" class="form-control" id="email" placeholder="Enter email">
+    </div>
+
+    <div class="form-group">
+      <label for="pwd">Password:</label>
+      <input type="password" class="form-control" id="pwd" placeholder="Enter password">
+    </div>
+
+    <div class="checkbox">
+      <label><input type="checkbox"> Remember me</label>
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+  </form>
+</div>-->
+
