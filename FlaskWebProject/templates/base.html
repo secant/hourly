@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>pic-y eats - {% block sub_heading %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}">
+  </head>
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <a href="../" class="navbar-brand">pic-y eats</a>
+        <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <div class="navbar-collapse collapse" id="navbar-main">
+        <ul class="nav navbar-nav">
+          {% if request.path == url_for('show_pics') %}
+          <li class="active">
+          {% else %}
+          <li>
+          {% endif %}
+            <a href="{{ url_for('show_pics') }}">Feed</a>
+          </li>
+          {% if request.path == url_for('upload_file') %}
+          <li class="active">
+          {% else %}
+          <li>
+          {% endif %}
+            <a href="{{ url_for('upload_file') }}">Upload</a>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          {% if request.path != url_for('home') %}
+          <li><a href="{{ url_for('logout') }}" target="_blank">Logout <i class="fa fa-times-circle-o"></i></a></li>
+          {% else %}
+          <li><a href="{{ url_for('login') }}" target="_blank">Login <i class="fa fa-sign-in"></i></a></li>
+          {% endif %}
+        </ul>
+
+      </div>
+    </div>
+  </nav>
+  <body>
+    {% block body %}
+    {% endblock %}
+  </body>
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}">
+</html>
