@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>pic-y eats - {% block sub_heading %}{% endblock %}</title>
+    <title>Pic-y Eats - {% block sub_heading %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}">
     <style>
@@ -14,7 +14,7 @@
       }
     </style>
   </head>
-  <nav class="navbar navbar-default">
+  <nav class="navbar navbar-default navbar-custom">
     <div class="container">
       <div class="navbar-header">
         <a href="../" class="navbar-brand">pic-y eats</a>
@@ -54,6 +54,13 @@
       </div>
     </div>
   </nav>
+  <style>
+  .navbar-custom {
+    color: #FFFFFF;
+    background-color: #336699;
+  }
+  </style>
+
   <body>
     {% block body %}
     {% endblock %}
