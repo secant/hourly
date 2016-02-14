@@ -3,7 +3,7 @@ import datetime as dt
 import os
 from flask import Flask, request, g, redirect, url_for, send_from_directory, render_template, \
                   flash, session
-from time_theme import updateTimeTheme
+from time_theme import updateTimeTheme, timeAllowed
 from werkzeug import secure_filename
 from werkzeug.contrib.cache import SimpleCache
 
@@ -21,7 +21,9 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
+app.config['START'] = dt.datetime(2015, 1, 1)
+app.config['END'] = dt.datetime(2015, 1, 1)
+app.config['THEME'] = ""
 # Establishing Database Connections
 def connect_db():
     return sqlite3.connect(app.config['DATABASE'])
@@ -106,20 +108,23 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 def get_theme():
-    cur = g.db.execute('select * from theme').fetchall()[0]
-    print cur, type(cur[0])
-    current_time = dt.datetime(cur[0],cur[1],cur[2],cur[3],cur[4])
-    theme = cur[5]
-    start_and_theme = updateTimeTheme(current_time, theme)
-    new_time = start_and_theme[0]
-    new_theme = start_and_theme[1]
-    if new_time.day != current_time.day:
-        g.db.execute('delete from theme')
-        command = 'insert into theme values(%d, %d, %d, %d, %d, "%s")' % (new_time.year, new_time.month, new_time.day, new_time.hour, new_time.minute, new_theme)
-        g.db.execute(command)
-        g.db.commit()
-    print(new_time)
-    return new_theme
+    # cur = g.db.execute('select * from theme').fetchall()[0]
+    # current_time = dt.datetime(cur[0],cur[1],cur[2],cur[3],cur[4])
+    # theme = cur[5]
+    # start_and_theme = updateTimeTheme(current_time, theme)
+    # new_time = start_and_theme[0]
+    # new_theme = start_and_theme[1]
+    # if new_time.day != current_time.day:
+    #     g.db.execute('delete from theme')
+    #     command = 'insert into theme values(%d, %d, %d, %d, %d, "%s")' % (new_time.year, new_time.month, new_time.day, new_time.hour, new_time.minute, new_theme)
+    #     g.db.execute(command)
+    #     g.db.commit()
+    # return new_theme
+    start_and_theme = updateTimeTheme(app.config['START'], app.config['THEME'])
+    app.config['START'] = start_and_theme[0]
+    app.config['END'] = app.config['START'] + dt.timedelta(hours=2)
+    app.config['THEME'] = start_and_theme[1]
+    return app.config['THEME']
 
 def clean_form(f):
     new_form = {}
@@ -144,7 +149,8 @@ def check_form(f, file):
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
-    if request.method == 'POST':
+    late = timeAllowed(app.config['START'])
+    if request.method == 'POST' and not late:
         file = request.files['file']
         good_form = check_form(request.form, file)
         if good_form['good']:
@@ -160,7 +166,7 @@ def upload_file():
             return render_template('upload.html', submit=True, filename='images/' + filename, info=request.form)
         else:
             return render_template('upload.html', submit=True, error=good_form['error'])
-    return render_template('upload.html', submit=False)
+    return render_template('upload.html', submit=False, late=late)
 
 @app.route('/feed')
 def show_pics():
@@ -169,7 +175,7 @@ def show_pics():
     cur = g.db.execute(command)
     entries = [dict(user=row[0],title=row[1],desc=row[2],loc=row[3], url=row[4]) for row in cur.fetchall()]
     print entries
-    return render_template('show_entries.html', entries=entries, theme=get_theme())
+    return render_template('show_entries.html', entries=entries, theme=get_theme(), start=app.config['START'], end=app.config['END'])
 
 if __name__=='__main__':
     app.run(debug=True)
