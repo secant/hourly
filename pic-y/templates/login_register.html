@@ -14,7 +14,25 @@
   </form>
 
   <h2>Register</h2>
-  {% if error2 %}<p class="error"><strong>Error:</strong> {{ error2 }}{% endif %}
+  {% if new %}
+  {% else %}
+    {% if good %}
+      Success! You have made an account. Here's what we got: <br>
+      Username: {{ info['username'] }} <br>
+      Password: {{ info['password'] }} <br>
+      Favorite food: {{ info['favfood'] }} <br>
+      First Name: {{ info['firstname'] }} <br>
+      Last Name: {{ info['lastname'] }} <br>
+    {% else %}
+      There was something wrong with your submission. Please fix the following: <br>
+        <ul>
+          {% for e in error %}
+            <li>{{ e }}</li>
+          {% endfor %}
+        </ul>
+    {% endif %}
+  {% endif %}
+
   <form action="{{ url_for('add_user') }}" method=post>
       <dl>
         <dt>Username:
