@@ -174,7 +174,7 @@ def show_pics():
     cur = g.db.execute(command)
     entries = [dict(user=row[0],title=row[1],desc=row[2],loc=row[3], url=row[4]) for row in cur.fetchall()]
     print entries
-    return render_template('show_entries.html', entries=entries, theme=get_theme(), start=app.config['START'], end=app.config['END'])
+    return render_template('show_entries.html', entries=entries, theme=get_theme(), start=app.config['START'], end=app.config['END'], current=dt.datetime.now())
 
 if __name__=='__main__':
     app.run(debug=True)

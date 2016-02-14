@@ -20,7 +20,7 @@ def timeAllowed(startDT):
 	
 	current = dt.datetime.now()
 	#checks that current time is in the valid range
-	if current>=startDT and current <= startDT+dt.timedelta(hours=2):
+	if current>=startDT and current <= startDT+dt.timedelta(hours=2) and current.day==startDT.day:
 		return True
 	return False 
 

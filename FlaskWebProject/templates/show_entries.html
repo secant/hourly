@@ -3,6 +3,7 @@
   <h1>Theme: {{theme}}</h1>
   <h2>Starting: {{start.strftime('%m-%d-%Y %I:%M %p')}}</h2>
   <h2>Ending: {{end.strftime('%m-%d-%Y %I:%M %p')}}</h2>
+  <h2>Current: {{current.strftime('%m-%d-%Y %I:%M %p')}}</h2>
   <ul class=entries>
   {% for entry in entries %}
     <li><h2>{{ entry.title }}</h2>{{ entry.user|safe }}
