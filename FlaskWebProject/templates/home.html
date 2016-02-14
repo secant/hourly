@@ -3,6 +3,7 @@
         <meta charset="utf-8">
         <title>Pic-y Eats || Home</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}">
     </head>
 
     <body>
@@ -13,8 +14,8 @@
         <source src="{{url_for('static', filename='food.ogg')}}" type="video/ogg">
     </video>
         <div class="container" style="height: 100vh;">
-            <h1><a href="/login_register" style="font-size: 70px;">Become a Pic-y Eater
-            </a><br><br>
+            <h1><a href="/login_register" style="font-size: 80px;">Become a Pic-y Eater
+            <i class="fa fa-camera-retro fa-lg"></i> </a><br><br>
             Savory bites of social media, snap it while it lasts.</h1>
         </div>
     </body>
