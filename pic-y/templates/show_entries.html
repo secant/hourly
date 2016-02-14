@@ -1,4 +1,5 @@
-{% extends "layout.html" %}
+
+<!-- {# extends "layout.html" #}
 {% block body %}
   {% if session.logged_in %}
     <form action="{{ url_for('add_entry') }}" method=post class=add-entry>
@@ -10,10 +11,13 @@
         <dd><input type=submit value=Share>
       </dl>
     </form>
-  {% endif %}
+  {% endif %} -->
   <ul class=entries>
   {% for entry in entries %}
-    <li><h2>{{ entry.title }}</h2>{{ entry.text|safe }}
+    <li><h2>{{ entry.title }}</h2>{{ entry.user|safe }}
+    {{entry.desc}}
+    {{entry.loc}}
+    <img src={{url_for('static', filename="images/" + entry.url)}} alt="Poof">
   {% else %}
     <li><em>Unbelievable.  No entries here so far</em>
   {% endfor %}
