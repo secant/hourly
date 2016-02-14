@@ -1,6 +1,7 @@
 # Pic-y Eats
 A web app for food enthusiasts. Built with Flask, Microsoft Azure, Python, SQLite, HTML, CSS, JavaScript.
 Check it out: http://pic-yeats.azurewebsites.net
+Demo: https://www.youtube.com/watch?v=0M7eW7He_pY
 
 *Built at TreeHacks 2016 at Stanford University*
 http://devpost.com/software/pic-y-eats
