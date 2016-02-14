@@ -1,3 +1,46 @@
-<body>
-	<h1><a href="/login_register">Enter</h1>
-</body>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>title</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
+    </head>
+
+    <body>
+    <video controls autoplay loop="True" muted poster="{{url_for('static', filename='3.jpg')}}" id="background">
+        <source src="{{url_for('static', filename='food.mp4')}}" type="video/mp4">
+    </video>
+        <div class="container" style="height: 100vh;">
+            <h1><a href="/login_register">Enter</h1>
+        </div>
+    </body>
+
+    <style>
+	    #background {
+	    position: fixed;
+	    top: 50%;
+	    left: 50%;
+	    min-width: 100%;
+	    min-height: 100%;
+	    width: auto;
+	    height: auto;
+	    z-index: -100;
+	    -webkit-transform: translateX(-50%) translateY(-50%);
+	    transform: translateX(-50%) translateY(-50%);
+	    background: url(polina.jpg) no-repeat;
+	    background-size: cover;
+		}
+		.container h1 {
+	   		color: white;
+	   		text-align: center;
+	   		position: relative;
+	   		top: 50%;
+	   		transform: translateY(-50%);
+		}
+    </style>
+
+</html>
+
+
+
+
+
