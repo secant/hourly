@@ -6,11 +6,14 @@
     </head>
 
     <body>
-    <video controls autoplay loop="True" muted poster="{{url_for('static', filename='3.jpg')}}" id="background">
+
+    <video controls autoplay='true' loop='true' muted poster="{{url_for('static', filename='startimage.jpg')}}" id="background">
         <source src="{{url_for('static', filename='food.mp4')}}" type="video/mp4">
     </video>
         <div class="container" style="height: 100vh;">
-            <h1><a href="/login_register">Enter</h1>
+            <h1><a href="/login_register" style="font-size: 60px;">Become a Pic-y Eater
+            </a><br>
+            Savory bites of social media--snap it while it lasts.</h1>
         </div>
     </body>
 
@@ -29,12 +32,15 @@
 	    background: url(polina.jpg) no-repeat;
 	    background-size: cover;
 		}
-		.container h1 {
+		.container h1{
 	   		color: white;
 	   		text-align: center;
 	   		position: relative;
 	   		top: 50%;
 	   		transform: translateY(-50%);
+		}
+		.container h1 a{
+			color: white;
 		}
     </style>
 
