@@ -11,7 +11,9 @@ def time(old, current=dt.datetime.now()):
 	if current.day == old.day:
 		current = dt.datetime(current.year,current.month,current.day + 1)
 	start = dt.datetime(current.year,current.month,current.day,hour=hr,minute=0)
-	while (start.hour+dt.timedelta(hours=2)<current and start.day==current.day):
+
+	dayTrack = start.day
+	while (start+dt.timedelta(hours=2)<current and start.day<=dayTrack):
 		start = start + dt.timedelta(hours=2)
 	
 	return start
