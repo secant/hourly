@@ -154,7 +154,7 @@ def check_form(f, file):
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
-    late = timeAllowed(app.config['START'])
+    late = not timeAllowed(app.config['START'])
     if request.method == 'POST' and not late:
         file = request.files['file']
         good_form = check_form(request.form, file)
