@@ -1,9 +1,11 @@
-import sqlite3
+import sqlite3, datetime
 import os
-from flask import Flask, request, g, redirect, url_for, send_from_directory, render_template
+from flask import Flask, request, g, redirect, url_for, send_from_directory, render_template, \
+                  flash, session
+from theme import updateThemeTime
 from werkzeug import secure_filename
 
-# database configuration
+# Configurations
 DATABASE = '/tmp/pic-y.db'
 SECRET_KEY = 'secretsecret'
 USERNAME = 'admin'
@@ -17,8 +19,10 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+start = dt.datetime(2015, 1, 1)
+curr_theme = ""
 
-# establish database connections
+# Establishing Database Connections
 def connect_db():
     return sqlite3.connect(app.config['DATABASE'])
 
@@ -32,12 +36,80 @@ def teardown_request(exception):
     if db is not None:
         db.close()
 
+@app.route('/')
+def home():
+    if session.get('logged_in'):
+        return redirect(url_for('show_pics'))
+    return render_template('home.html')
+
+# Logging In and Out
+@app.route('/login_register', methods=['GET', 'POST'])
+def login():
+    error1 = None
+    if request.method == 'POST':
+        cur = g.db.execute('select username, password from users')
+        usernames_passwords_dict = {row[0]: row[1] for row in cur.fetchall()}
+        attemptedusername = request.form['username']
+        attemptedpassword = request.form['password']
+
+        if not attemptedusername:
+            error1 = "Please enter username."
+        elif not attemptedpassword:
+            error1 = "Please enter password."
+        else:
+            if (attemptedusername not in usernames_passwords_dict):
+                error1 = 'Invalid username'
+            elif request.form['password'] != usernames_passwords_dict[attemptedusername]:
+                error1 = 'Invalid password'
+            else:
+                session['logged_in'] = True
+                flash('You were logged in')
+                return redirect(url_for('show_pics'))
+    return render_template('login_register.html', error1=error1)
+
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    flash ('You were logged out')
+    return redirect(url_for('show_pics'))
+
+# Adding Users
+@app.route('/register', methods=['POST'])
+def add_user():
+    inputU = request.form['username']
+    inputP= request.form['password']
+    inputFF = request.form['favfood']
+    inputFN = request.form['firstname']
+    inputLN = request.form['lastname']
+    error2 = None
+    if not inputU:
+        error2 = "Please enter username."
+    elif not inputP:
+        error2 = "Please enter password."
+    elif not inputFF:
+        error2 = "Please enter favorite food."
+    elif not inputFN:
+        error2 = "Please enter first name."
+    elif not inputLN:
+        error2 = "Please enter lastname."
+    else:
+        g.db.execute('insert into users (username, password, favfood, firstname, lastname) values (?, ?, ?, ?, ?)',[request.form['username'], request.form['password'], request.form['favfood'], request.form['firstname'], request.form['lastname']])
+        g.db.commit()
+        flash('User registration successful.')
+        return redirect(url_for('show_pics')) #redirects back to show entries page?
+    return render_template('login_register.html', error2=error2)
+
+# Helper functions for uploading
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 def get_theme():
-    return "Potato"
+    start_and_theme = updateThemeTime(start, curr_theme)
+    start = start_and_theme[0]
+    curr_theme = start_and_theme[1]
+    return curr_theme
 
 def clean_form(f):
     new_form = {}
