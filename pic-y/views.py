@@ -80,5 +80,9 @@ def upload_file():
             return render_template('upload.html', submit=True, error=good_form['error'])
     return render_template('upload.html', submit=False)
 
+@app.route('/feed')
+def show_pics():
+    return None
+
 if __name__=='__main__':
     app.run(debug=True)
