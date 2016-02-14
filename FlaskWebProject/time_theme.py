@@ -38,7 +38,7 @@ def updateTimeTheme(start, curr_theme):
 	#returns a tuple with the newStartDT, newTheme
 
 	#checks if we're past the current start time
-	if not timeAllowed(start) and current.day != start.day - 1:
+	if not timeAllowed(start) and current.day != start.day + 1:
 		#generates new start time and theme
 		start = time(start)
 		curr_theme = theme()
