@@ -65,41 +65,47 @@ def login():
             else:
                 session['logged_in'] = True
                 flash('You were logged in')
-                return redirect(url_for('show_pics'))
-    return render_template('login_register.html', error1=error1)
-
+                return redirect(url_for('show_entries'))
+    return render_template('login_register.html', error1=error1, new=True)
 
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)
     flash ('You were logged out')
-    return redirect(url_for('show_pics'))
+    return redirect(url_for('show_entries'))
 
-# Adding Users
+# Adding users
+
+def check_registration_form(f):
+    error = []
+    good = True
+    if f['username'] == "":
+        error.append("You need to enter a username.")
+        good = False
+    if f['password'] == "":
+        error.append("You need to enter a password.")
+        good = False
+    if f['favfood'] == "":
+        error.append("You need to enter a favorite food.")
+        good = False
+    if f['firstname'] == "":
+        error.append("You need to enter a first name.")
+        good = False
+    if f['lastname'] == "":
+        error.append("You need to enter a last name.")
+        good = False
+    return {'error': error, 'good': good}
+
 @app.route('/register', methods=['POST'])
 def add_user():
-    inputU = request.form['username']
-    inputP= request.form['password']
-    inputFF = request.form['favfood']
-    inputFN = request.form['firstname']
-    inputLN = request.form['lastname']
-    error2 = None
-    if not inputU:
-        error2 = "Please enter username."
-    elif not inputP:
-        error2 = "Please enter password."
-    elif not inputFF:
-        error2 = "Please enter favorite food."
-    elif not inputFN:
-        error2 = "Please enter first name."
-    elif not inputLN:
-        error2 = "Please enter lastname."
+    good_form = check_registration_form(request.form)
+    if good_form['good']: #if true that everything is good
+            g.db.execute('insert into users (username, password, favfood, firstname, lastname) values (?, ?, ?, ?, ?)',
+        [request.form['username'], request.form['password'], request.form['favfood'], request.form['firstname'], request.form['lastname']])
+            g.db.commit()
+            return render_template('login_register.html', info=request.form, good=good_form['good'], new=False)
     else:
-        g.db.execute('insert into users (username, password, favfood, firstname, lastname) values (?, ?, ?, ?, ?)',[request.form['username'], request.form['password'], request.form['favfood'], request.form['firstname'], request.form['lastname']])
-        g.db.commit()
-        flash('User registration successful.')
-        return redirect(url_for('show_pics')) #redirects back to show entries page?
-    return render_template('login_register.html', error2=error2)
+        return render_template('login_register.html', error=good_form['error'], good=False, new=False)
 
 # Helper functions for uploading
 def allowed_file(filename):
