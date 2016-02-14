@@ -60,7 +60,7 @@ def check_form(f, file):
     return {'error': error, 'good': good}
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         file = request.files['file']
@@ -79,10 +79,6 @@ def upload_file():
         else:
             return render_template('upload.html', submit=True, error=good_form['error'])
     return render_template('upload.html', submit=False)
-
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return(send_from_directory(app.config['UPLOAD_FOLDER'], filename))
 
 @app.route('/feed')
 def show_pics():
