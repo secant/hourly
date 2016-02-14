@@ -1,5 +1,6 @@
 {# extends "layout.html" #}
 {% block body %}
+  <h1>Theme: {{theme}}</h1>
   <ul class=entries>
   {% for entry in entries %}
     <li><h2>{{ entry.title }}</h2>{{ entry.user|safe }}

@@ -1,9 +1,13 @@
-import sqlite3, datetime
+import sqlite3
+import datetime as dt
 import os
 from flask import Flask, request, g, redirect, url_for, send_from_directory, render_template, \
                   flash, session
-from theme import updateThemeTime
+from time_theme import updateTimeTheme
 from werkzeug import secure_filename
+from werkzeug.contrib.cache import SimpleCache
+
+cache = SimpleCache()
 
 # Configurations
 DATABASE = '/tmp/pic-y.db'
@@ -11,16 +15,12 @@ SECRET_KEY = 'secretsecret'
 USERNAME = 'admin'
 PASSWORD = 'default'
 
-
 UPLOAD_FOLDER = 'static/images/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-start = dt.datetime(2015, 1, 1)
-curr_theme = ""
 
 # Establishing Database Connections
 def connect_db():
@@ -106,10 +106,20 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 def get_theme():
-    start_and_theme = updateThemeTime(start, curr_theme)
-    start = start_and_theme[0]
-    curr_theme = start_and_theme[1]
-    return curr_theme
+    cur = g.db.execute('select * from theme').fetchall()[0]
+    print cur, type(cur[0])
+    current_time = dt.datetime(cur[0],cur[1],cur[2],cur[3],cur[4])
+    theme = cur[5]
+    start_and_theme = updateTimeTheme(current_time, theme)
+    new_time = start_and_theme[0]
+    new_theme = start_and_theme[1]
+    if new_time.day != current_time.day:
+        g.db.execute('delete from theme')
+        command = 'insert into theme values(%d, %d, %d, %d, %d, "%s")' % (new_time.year, new_time.month, new_time.day, new_time.hour, new_time.minute, new_theme)
+        g.db.execute(command)
+        g.db.commit()
+    print(new_time)
+    return new_theme
 
 def clean_form(f):
     new_form = {}
@@ -159,7 +169,7 @@ def show_pics():
     cur = g.db.execute(command)
     entries = [dict(user=row[0],title=row[1],desc=row[2],loc=row[3], url=row[4]) for row in cur.fetchall()]
     print entries
-    return render_template('show_entries.html', entries=entries)
+    return render_template('show_entries.html', entries=entries, theme=get_theme())
 
 if __name__=='__main__':
     app.run(debug=True)
