@@ -64,6 +64,7 @@ def login():
                 error1 = 'Invalid password'
             else:
                 session['logged_in'] = True
+                session['user'] = attemptedusername
                 flash('You were logged in')
                 return redirect(url_for('show_pics'))
     return render_template('login_register.html', error1=error1, new=True)
@@ -71,6 +72,7 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)
+    session.pop('user', None)
     flash ('You were logged out')
     return redirect(url_for('home'))
 
@@ -177,8 +179,8 @@ def upload_file():
             originalfilename = secure_filename(file.filename)
             filename = g.db.execute('select max(id) from food')
             filename = str(filename.fetchall()[0][0] + 1) + "." + originalfilename.rsplit('.', 1)[1]
-            g.db.execute('insert into food (user, title, description, location, theme, url) values ("dummy",?,?,?,?,?)',
-        [request.form['title'], request.form['description'], request.form['location'], get_theme(), filename])
+            g.db.execute('insert into food (user, title, description, location, theme, url) values (?,?,?,?,?,?)',
+        [session.get('user'), request.form['title'], request.form['description'], request.form['location'], get_theme(), filename])
             g.db.commit()
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return render_template('upload.html', submit=True, filename='images/' + filename, info=request.form)
