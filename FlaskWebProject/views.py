@@ -65,14 +65,14 @@ def login():
             else:
                 session['logged_in'] = True
                 flash('You were logged in')
-                return redirect(url_for('show_entries'))
+                return redirect(url_for('show_pics'))
     return render_template('login_register.html', error1=error1, new=True)
 
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)
     flash ('You were logged out')
-    return redirect(url_for('show_entries'))
+    return redirect(url_for('show_pics'))
 
 # Adding users
 
