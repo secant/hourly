@@ -9,7 +9,7 @@ def time(old, current=dt.datetime.now()):
 #time range is two hours between 7am and 10pm
 	hr = random.randint(7,22)
 	if current.day == old.day:
-		current = dt.datetime(current.year,current.month,current.day)
+		current = dt.datetime(current.year,current.month,current.day + 1)
 	start = dt.datetime(current.year,current.month,current.day,hour=hr,minute=0)
 	return start
 
@@ -34,7 +34,7 @@ def updateTimeTheme(start, curr_theme, current=dt.datetime.now()):
 	#returns a tuple with the newStartDT, newTheme
 
 	#checks if we're past the current start time
-	if not timeAllowed(start, current) and current.day >= start.day:
+	if not timeAllowed(start, current) and current > start:
 		#generates new start time and theme
 		start = time(start,current)
 		curr_theme = theme()
