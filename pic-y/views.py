@@ -1,6 +1,6 @@
 import sqlite3
 import os
-from flask import Flask, request, g, redirect, url_for, send_from_directory
+from flask import Flask, request, g, redirect, url_for, send_from_directory, render_template
 from werkzeug import secure_filename
 
 # database configuration
@@ -10,7 +10,7 @@ USERNAME = 'admin'
 PASSWORD = 'default'
 
 
-UPLOAD_FOLDER = 'images/'
+UPLOAD_FOLDER = 'static/images/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 app = Flask(__name__)
@@ -48,11 +48,24 @@ def clean_form(f):
             new_form[key] = f[key]
     return new_form
 
-@app.route('/', methods=['GET', 'POST'])
+def check_form(f, file):
+    error = []
+    good = True
+    if not file:
+        error.append("You need to choose a file to upload.")
+        good = False
+    if f['title'] == "":
+        error.append("You need to enter a title.")
+        good = False
+    return {'error': error, 'good': good}
+
+
+@app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         file = request.files['file']
-        if file and allowed_file(file.filename):
+        good_form = check_form(request.form, file)
+        if good_form['good']:
             request.form = clean_form(request.form)
             originalfilename = secure_filename(file.filename)
             filename = g.db.execute('select max(id) from food')
@@ -62,26 +75,20 @@ def upload_file():
             g.db.commit()
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             print 'going to upload file?'
-            return redirect(url_for('uploaded_file',
-                                    filename=filename))
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form action="" method=post enctype=multipart/form-data>
-      <p><input type=file name=file><br>
-         <b>Title your image*: </b><br>
-         <input type=text name=title><br>
-         <b>Add a description: </b><br>
-         <input type=textarea name=description><br>
-         <b>Location: </b><br>
-         <input type=text name=location><br>
-         <input type=submit value=Upload>
-    </form>
-    '''
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return(send_from_directory(app.config['UPLOAD_FOLDER'], filename))
+            return render_template('upload.html', submit=True, filename='images/' + filename, info=request.form)
+        else:
+            return render_template('upload.html', submit=True, error=good_form['error'])
+    return render_template('upload.html', submit=False)
+
+@app.route('/feed')
+def show_pics():
+    theme = get_theme()
+    command = 'select user, title, description, location, url from food where theme = "' + theme + '"'
+    cur = g.db.execute(command)
+    entries = [dict(user=row[0],title=row[1],desc=row[2],loc=row[3], url=row[4]) for row in cur.fetchall()]
+    print entries
+    return render_template('show_entries.html', entries=entries)
 
 if __name__=='__main__':
     app.run(debug=True)
+
