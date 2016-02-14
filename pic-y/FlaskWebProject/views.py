@@ -5,25 +5,24 @@ from flask import Flask, request, g, redirect, url_for, send_from_directory, ren
                   flash, session
 from time_theme import updateTimeTheme, timeAllowed
 from werkzeug import secure_filename
-from werkzeug.contrib.cache import SimpleCache
+from FlaskWebProject import app
 
-cache = SimpleCache()
+# # Configurations
+# DATABASE = '/tmp/pic-y.db'
+# SECRET_KEY = 'secretsecret'
+# USERNAME = 'admin'
+# PASSWORD = 'default'
 
-# Configurations
-DATABASE = '/tmp/pic-y.db'
-SECRET_KEY = 'secretsecret'
-USERNAME = 'admin'
-PASSWORD = 'default'
+# UPLOAD_FOLDER = 'static/images/'
+# ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
-UPLOAD_FOLDER = 'static/images/'
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+# app = Flask(__name__)
+# app.config.from_object(__name__)
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# app.config['START'] = dt.datetime(2015, 1, 1)
+# app.config['END'] = dt.datetime(2015, 1, 1)
+# app.config['THEME'] = ""
 
-app = Flask(__name__)
-app.config.from_object(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['START'] = dt.datetime(2015, 1, 1)
-app.config['END'] = dt.datetime(2015, 1, 1)
-app.config['THEME'] = ""
 # Establishing Database Connections
 def connect_db():
     return sqlite3.connect(app.config['DATABASE'])
