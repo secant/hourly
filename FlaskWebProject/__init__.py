@@ -13,8 +13,8 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['START'] = dt.datetime(2015, 1, 1)
-app.config['END'] = dt.datetime(2015, 1, 1)
+app.config['START'] = dt.datetime(2015, 2, 1)
+app.config['END'] = dt.datetime(2015, 2, 1)
 app.config['THEME'] = ""
 
 import FlaskWebProject.views
