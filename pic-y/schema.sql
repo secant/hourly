@@ -14,4 +14,4 @@ create table food (
 	title text not null,
 	description text,
 	theme text not null
-)
+);
