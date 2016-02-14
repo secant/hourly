@@ -82,7 +82,13 @@ def upload_file():
 
 @app.route('/feed')
 def show_pics():
-    return None
+    theme = get_theme()
+    command = 'select user, title, description, location, url from food where theme = "' + theme + '"'
+    cur = g.db.execute(command)
+    entries = [dict(user=row[0],title=row[1],desc=row[2],loc=row[3], url=row[4]) for row in cur.fetchall()]
+    print entries
+    return render_template('show_entries.html', entries=entries)
 
 if __name__=='__main__':
     app.run(debug=True)
+
