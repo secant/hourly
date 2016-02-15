@@ -17,23 +17,23 @@
         <form role="form" action="" method=post enctype=multipart/form-data id="upload">
             <div class="form-group">
                 <span class="btn btn-info btn-file">
-                <input type="file">
+                <input type="file" name=file>
                 </span>
             </div>
 
             <div class="form-group">
                 <label for="title">Title your image*</label>
-                <input type="text" class="form-control" id="title" placeholder="Enter title">
+                <input type="text" class="form-control" id="title" name=title placeholder="Enter title">
             </div>
 
             <div class="form-group">
-                <label for="descrip">Add a description:</label>
-                <textarea form="upload" class="form-control" id="descrip" placeholder="Enter description"></textarea>
+                <label for="description">Add a description:</label>
+                <textarea form="upload" class="form-control" id="description" name=description placeholder="Enter description"></textarea>
             </div>
 
             <div class="form-group">
                 <label for="location">Location</label>
-                <input type="text" class="form-control" id="location" placeholder="Enter location">
+                <input type="text" class="form-control" id="location" name=location placeholder="Enter location">
             </div>
 
             <button type="submit" class="btn btn-info">Upload</button>

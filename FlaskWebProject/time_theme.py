@@ -22,6 +22,7 @@ def timeAllowed(startDT, current=dt.datetime.now()):
 	#returns true if current time allows for upload, false otherwise
 	#takes dt.datetime object as the starttime
 	#checks that current time is in the valid range
+	print("timeAllowed: ", current>=startDT and current <= startDT+dt.timedelta(hours=2) and current.day==startDT.day)
 	if current>=startDT and current <= startDT+dt.timedelta(hours=2) and current.day==startDT.day:
 		return True
 	return False 

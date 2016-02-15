@@ -154,6 +154,9 @@ def check_form(f, file):
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
+    get_theme()
+    print "upload_file: ", dt.datetime.now()
+    print app.config['START']
     late = not timeAllowed(app.config['START'])
     if request.method == 'POST' and not late:
         file = request.files['file']
@@ -176,10 +179,9 @@ def upload_file():
 @app.route('/feed')
 def show_pics():
     theme = get_theme()
-    command = 'select user, title, description, location, url from food where theme = "' + theme + '"'
+    command = 'select id, user, title, description, location, url from food where theme = "' + theme + '"'
     cur = g.db.execute(command)
-    entries = [dict(user=row[0],title=row[1],desc=row[2],loc=row[3], url=row[4]) for row in cur.fetchall()]
-    print entries
+    entries = [dict(id=row[0], user=row[1],title=row[2],desc=row[3],loc=row[4], url=row[5]) for row in cur.fetchall()]
     return render_template('show_entries.html', entries=entries, theme=get_theme(), start=app.config['START'], end=app.config['END'], current=dt.datetime.now())
 
 if __name__=='__main__':

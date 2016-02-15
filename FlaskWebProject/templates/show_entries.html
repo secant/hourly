@@ -51,7 +51,7 @@
     <strong>{{start.strftime('%m-%d-%Y')}}</strong> &nbsp; &nbsp; <i class="fa fa-ellipsis-h"></i> &nbsp; &nbsp;
     <strong>Starting Uploading at: {{start.strftime('%I:%M %p')}}</strong> &nbsp; &nbsp; <i class="fa fa-ellipsis-h"></i> &nbsp; &nbsp;
     <strong>Ending at: {{end.strftime('%I:%M %p')}}</strong> &nbsp; &nbsp; <i class="fa fa-ellipsis-h"></i> &nbsp; &nbsp;
-    <strong>Currently: {{current.strftime('%I:%M %p')}}</strong>
+    <strong>Currently: {{current.strftime('%I:%M %p')}}</strong><br>
   <div class="row">
   <section id="photos">
   {% for e in entries %}
@@ -75,10 +75,11 @@
      </div>
      </div>
    </div>
+   
    {% else %}
-      <br> &nbsp; &nbsp; No entries here so far!
+    <br></section> &nbsp; &nbsp; No entries here so far!
    {% endfor %}
- </section>
+   </section>
     </div>
 </div>
 {% endblock %}
