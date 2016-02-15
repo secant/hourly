@@ -3,6 +3,9 @@
 {% block sub_heading %} Upload {% endblock %}
     {% block body %}
     <div class="container">
+        {% if late %}
+            <div class="alert alert-danger" role="alert">You cannot upload a picture yet! Uploading for today starts at {{start.strftime('%I:%M %p')}}.</div>
+        {% endif %}
         <h1>Upload Image</h1>
         {% if submit %}
             {% if error %}

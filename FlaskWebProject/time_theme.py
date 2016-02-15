@@ -2,6 +2,14 @@
 #what we need in main function: global variable to save the current theme and startime
 import random
 import datetime as dt
+from urllib import urlopen
+from time import strptime
+
+def current_time():
+	f = urlopen("http://just-the-time.appspot.com/")
+	curr = f.read()
+	curr = strptime(curr, "%Y-%m-%d %H:%M:%S ")
+	return dt.datetime(curr.tm_year,curr.tm_mon,curr.tm_mday,curr.tm_hour,curr.tm_min,curr.tm_sec)
 
 def time(old, current=dt.datetime.now()):
 #takes in oldStartDT

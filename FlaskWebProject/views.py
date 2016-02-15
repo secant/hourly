@@ -3,7 +3,7 @@ import datetime as dt
 import os
 from flask import Flask, request, g, redirect, url_for, send_from_directory, render_template, \
                   flash, session
-from time_theme import updateTimeTheme, timeAllowed
+from time_theme import updateTimeTheme, timeAllowed, current_time
 from werkzeug import secure_filename
 from FlaskWebProject import app
 
@@ -125,9 +125,11 @@ def get_theme():
     #     g.db.execute(command)
     #     g.db.commit()
     # return new_theme
-    start_and_theme = updateTimeTheme(app.config['START'], app.config['THEME'])
+    start_and_theme = updateTimeTheme(app.config['START'], app.config['THEME'], current_time())
     app.config['START'] = start_and_theme[0]
+    print "start + 2: ", app.config['START'] + dt.timedelta(hours=2)
     app.config['END'] = app.config['START'] + dt.timedelta(hours=2)
+    print "end: ", app.config['END']
     app.config['THEME'] = start_and_theme[1]
     return app.config['THEME']
 
@@ -157,8 +159,6 @@ def upload_file():
     if not session.get('logged_in'):
         return redirect(url_for('home'))
     get_theme()
-    print "upload_file: ", dt.datetime.now()
-    print app.config['START']
     late = not timeAllowed(app.config['START'])
     if request.method == 'POST' and not late:
         file = request.files['file']
@@ -172,7 +172,6 @@ def upload_file():
         [request.form['title'], request.form['description'], request.form['location'], get_theme(), filename])
             g.db.commit()
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            print 'going to upload file?'
             return render_template('upload.html', submit=True, filename='images/' + filename, info=request.form)
         else:
             return render_template('upload.html', submit=True, error=good_form['error'])
@@ -186,7 +185,9 @@ def show_pics():
     command = 'select id, user, title, description, location, url from food where theme = "' + theme + '"'
     cur = g.db.execute(command)
     entries = [dict(id=row[0], user=row[1],title=row[2],desc=row[3],loc=row[4], url=row[5]) for row in cur.fetchall()]
-    return render_template('show_entries.html', entries=entries, theme=get_theme(), start=app.config['START'], end=app.config['END'], current=dt.datetime.now())
+    print "start feed: ", app.config['START']
+    print "end feed: ", app.config['END']
+    return render_template('show_entries.html', entries=entries, theme=theme, s=app.config['START'], e=app.config['END'], c=current_time())
 
 if __name__=='__main__':
     app.run(debug=True)
