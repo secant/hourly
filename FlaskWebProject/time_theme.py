@@ -30,8 +30,10 @@ def timeAllowed(startDT, current=current_time()):
 	#returns true if current time allows for upload, false otherwise
 	#takes dt.datetime object as the starttime
 	#checks that current time is in the valid range
+	print "start feed: ", startDT
+	print "current: ", current
 	print("timeAllowed: ", current>=startDT and current <= startDT+dt.timedelta(hours=2) and current.day==startDT.day)
-	if current>=startDT and current <= startDT+dt.timedelta(hours=2):
+	if current>=startDT and current <= startDT+dt.timedelta(hours=2) and current.day==startDT.day:
 		return True
 	return False 
 

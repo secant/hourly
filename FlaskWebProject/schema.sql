@@ -19,5 +19,15 @@ create table food (
     url text not null
 );
 
-insert into food values(1, 'bob', 'title', 'desc', 'loc', 'potato', '1.jpg');
+drop table if exists theme;
+create table theme (
+    year integer not null,
+    month integer not null,
+    day integer not null,
+    hour integer not null,
+    min integer not null,
+    theme text not null
+);
 
+insert into food values(1, 'bob', 'title', 'desc', 'loc', 'potato', '1.jpg');
+insert into theme values(2015, 2, 1, 15, 4, "potato");

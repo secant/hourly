@@ -112,26 +112,35 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
+def table_to_datetime():
+    cur = g.db.execute('select * from theme').fetchall()[0]
+    start_time = dt.datetime(cur[0],cur[1],cur[2],cur[3],cur[4])
+    theme = cur[5]
+    return start_time, theme
+
 def get_theme():
-    # cur = g.db.execute('select * from theme').fetchall()[0]
-    # current_time = dt.datetime(cur[0],cur[1],cur[2],cur[3],cur[4])
-    # theme = cur[5]
-    # start_and_theme = updateTimeTheme(current_time, theme)
-    # new_time = start_and_theme[0]
-    # new_theme = start_and_theme[1]
-    # if new_time.day != current_time.day:
-    #     g.db.execute('delete from theme')
-    #     command = 'insert into theme values(%d, %d, %d, %d, %d, "%s")' % (new_time.year, new_time.month, new_time.day, new_time.hour, new_time.minute, new_theme)
-    #     g.db.execute(command)
-    #     g.db.commit()
-    # return new_theme
-    start_and_theme = updateTimeTheme(app.config['START'], app.config['THEME'], current_time())
+    time_and_theme = table_to_datetime()
+    print "start and theme: ", time_and_theme[0]
+    start_and_theme = updateTimeTheme(time_and_theme[0], time_and_theme[1], current_time())
+    #new_time = start_and_theme[0]
+    #new_theme = start_and_theme[1]
     app.config['START'] = start_and_theme[0]
-    print "start + 2: ", app.config['START'] + dt.timedelta(hours=2)
     app.config['END'] = app.config['START'] + dt.timedelta(hours=2)
-    print "end: ", app.config['END']
     app.config['THEME'] = start_and_theme[1]
+    if app.config['START'].day != time_and_theme[0].day:
+        new_time = app.config['START']
+        g.db.execute('delete from theme')
+        command = 'insert into theme values(%d, %d, %d, %d, %d, "%s")' % (new_time.year, new_time.month, new_time.day, new_time.hour, new_time.minute, app.config['THEME'])
+        g.db.execute(command)
+        g.db.commit()
     return app.config['THEME']
+    # start_and_theme = updateTimeTheme(app.config['START'], app.config['THEME'], current_time())
+    # app.config['START'] = start_and_theme[0]
+    # print "start + 2: ", app.config['START'] + dt.timedelta(hours=2)
+    # app.config['END'] = app.config['START'] + dt.timedelta(hours=2)
+    # print "end: ", app.config['END']
+    # app.config['THEME'] = start_and_theme[1]
+    # return app.config['THEME']
 
 def clean_form(f):
     new_form = {}
@@ -159,7 +168,7 @@ def upload_file():
     if not session.get('logged_in'):
         return redirect(url_for('home'))
     get_theme()
-    late = not timeAllowed(app.config['START'])
+    late = not timeAllowed(app.config['START'], current_time())
     if request.method == 'POST' and not late:
         file = request.files['file']
         good_form = check_form(request.form, file)
@@ -185,8 +194,6 @@ def show_pics():
     command = 'select id, user, title, description, location, url from food where theme = "' + theme + '"'
     cur = g.db.execute(command)
     entries = [dict(id=row[0], user=row[1],title=row[2],desc=row[3],loc=row[4], url=row[5]) for row in cur.fetchall()]
-    print "start feed: ", app.config['START']
-    print "end feed: ", app.config['END']
     return render_template('show_entries.html', entries=entries, theme=theme, s=app.config['START'], e=app.config['END'], c=current_time())
 
 if __name__=='__main__':
