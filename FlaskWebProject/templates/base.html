@@ -25,6 +25,7 @@
         </button>
       </div>
       <div class="navbar-collapse collapse" id="navbar-main">
+        {% if request.path != url_for('home') and request.path != url_for('login') %}
         <ul class="nav navbar-nav">
           {% if request.path == url_for('show_pics') %}
           <li class="active">
@@ -41,11 +42,12 @@
             <a href="{{ url_for('upload_file') }}">Upload</a>
           </li>
         </ul>
+        {% endif %}
         <ul class="nav navbar-nav navbar-right">
-          {% if request.path != url_for('home') %}
-          <li><a href="{{ url_for('logout') }}" target="_blank">Logout <i class="fa fa-times-circle-o"></i></a></li>
+          {% if request.path != url_for('home') and request.path != url_for('login') %}
+          <li><a href="{{ url_for('logout') }}">Logout <i class="fa fa-times-circle-o"></i></a></li>
           {% else %}
-          <li><a href="{{ url_for('login') }}" target="_blank">Login <i class="fa fa-sign-in"></i></a></li>
+          <li><a href="{{ url_for('login') }}">Login <i class="fa fa-sign-in"></i></a></li>
           {% endif %}
         </ul>
 

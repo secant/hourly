@@ -154,6 +154,8 @@ def check_form(f, file):
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
+    if not session.get('logged_in'):
+        return redirect(url_for('home'))
     get_theme()
     print "upload_file: ", dt.datetime.now()
     print app.config['START']
@@ -174,10 +176,12 @@ def upload_file():
             return render_template('upload.html', submit=True, filename='images/' + filename, info=request.form)
         else:
             return render_template('upload.html', submit=True, error=good_form['error'])
-    return render_template('upload.html', submit=False, late=late)
+    return render_template('upload.html', submit=False, late=late, start=app.config['START'])
 
 @app.route('/feed')
 def show_pics():
+    if not session.get('logged_in'):
+        return redirect(url_for('home'))
     theme = get_theme()
     command = 'select id, user, title, description, location, url from food where theme = "' + theme + '"'
     cur = g.db.execute(command)
