@@ -11,7 +11,7 @@ def current_time():
 	curr = strptime(curr, "%Y-%m-%d %H:%M:%S ")
 	return dt.datetime(curr.tm_year,curr.tm_mon,curr.tm_mday,curr.tm_hour,curr.tm_min,curr.tm_sec)
 
-def time(old, current=dt.datetime.now()):
+def time(old, current=current_time()):
 #takes in oldStartDT
 #returns a datetime.time object for the start time of allowed range
 #time range is two hours between 7am and 10pm
@@ -26,12 +26,12 @@ def time(old, current=dt.datetime.now()):
 	
 	return start
 
-def timeAllowed(startDT, current=dt.datetime.now()):
+def timeAllowed(startDT, current=current_time()):
 	#returns true if current time allows for upload, false otherwise
 	#takes dt.datetime object as the starttime
 	#checks that current time is in the valid range
 	print("timeAllowed: ", current>=startDT and current <= startDT+dt.timedelta(hours=2) and current.day==startDT.day)
-	if current>=startDT and current <= startDT+dt.timedelta(hours=2) and current.day==startDT.day:
+	if current>=startDT and current <= startDT+dt.timedelta(hours=2):
 		return True
 	return False 
 
@@ -43,7 +43,7 @@ def theme():
 	return select[:-1]
 
 
-def updateTimeTheme(start, curr_theme, current=dt.datetime.now()):
+def updateTimeTheme(start, curr_theme, current=current_time()):
 	#checks if we've past today's upload date
 	#returns a tuple with the newStartDT, newTheme
 
